@@ -29,7 +29,7 @@ module Unit_ħkB4πϵ0_meVnm
     const Second = 1e9ns;
     const Watt = Joule/Second;
     const SpeedOfLight = 2.9979e8 * nm/ns;
-    const Tesla = (1e-9V/nm) / (1nm/ns)
+    const Tesla = (1e-9Voltage/nm) / (1nm/ns)
     # temperature -> Kelvin
     const Kelvin = 8.6173e-2 * meV;
     #####################################
