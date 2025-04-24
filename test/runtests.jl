@@ -1,6 +1,8 @@
 using PhysicalUnits
 using Test
 
+@test nm == 1.0
+
 @testset "PhysicalUnits.jl" begin
-    # Write your tests here.
+    @test nm == 1.0
 end
