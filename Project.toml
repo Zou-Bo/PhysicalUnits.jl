@@ -1,10 +1,10 @@
 name = "PhysicalUnits"
 uuid = "260a1713-e24c-4a46-a881-35260f93c772"
 authors = ["Alice loves Bob"]
-version = "1.0.0"
+version = "1.1.0"
 
 [compat]
-julia = "1.6"
+julia = "1"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
