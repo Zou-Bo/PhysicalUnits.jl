@@ -1,12 +1,21 @@
 # PhysicalUnits.jl
 
-[![CI](https://github.com/zoubo/PhysicalUnits.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/zoubo/PhysicalUnits.jl/actions/workflows/CI.yml)
+`PhysicalUnits.jl` is a Julia package that provides a minimal way to work with physical constants and units. 
+Each physical constants and units are just `Float64`. One only need to apply the units when defining the system and 
+when read the values of computed quantities. 
 
-`PhysicalUnits.jl` is a Julia package that provides a simple way to work with different systems of physical units. It allows you to switch between different "modes", where each mode defines a set of physical constants and units. This is particularly useful in physics research, where different systems of natural units are often used.
+For example, define the system with `a = 1nm` and `B = 14Tesla` at the begining.
+Then in the calculation, you can use `ElectronMass` and other physical constants.
+After the calculation is finished, instead of reading out the result energy `E` directly, read `E/meV`.
+In this example, `nm`, `Tesla`, `ElectronMass`, and `meV` are all `Float64`.
+
+It does not provide any dimension-match check. It is your responsibility to make sure your formula are physically meaningful.
+
+It allows you to choose from different unit "modes", where each mode defines a set of physical constants and units as 1. This is particularly useful when natural units are often used.
 
 ## Installation
 
-Once the package is registered, you can install it with the Julia package manager.
+You can install it with the Julia package manager.
 From the Julia REPL, type `]` to enter the Pkg REPL mode and run:
 ```
 pkg> add PhysicalUnits
@@ -21,7 +30,7 @@ Pkg.add("PhysicalUnits")
 
 There are three main ways to use `PhysicalUnits.jl`:
 
-### 1. Using a specific mode directly
+### 1. Using a specific mode directly (Most Recommended)
 
 This is the recommended approach if you only need one set of units for your project. It is fast and safe because all constants are `const`.
 
@@ -30,12 +39,13 @@ using PhysicalUnits.ħkB4πϵ0_meVnm
 
 energy = 10meV
 temperature = 300Kelvin
-println("energy=$energy=$(energy/meV)meV, temperature=$temperature=$(temperature/Kelvin)K")
+# Notice that the value itself has no physical meaning; you need to divide it by the unit.
+println("energy = $energy = $(energy/meV)meV, temperature = $temperature = $(temperature/Kelvin)K")
 ```
 
 ### 2. Choose the mode at runtime
 
-This approach is flexible and allows you to choose the unit mode at run time. However, this flexibility comes at a performance cost because the variables are not `const`.
+This approach is flexible and allows you to choose the unit mode at run time. However, this flexibility comes at a performance cost because the physical constants and units are not `const`.
 
 ```julia
 using PhysicalUnits
@@ -44,10 +54,12 @@ using PhysicalUnits
 @show len = 5nm;
 
 PhysicalUnit(:ħkB4πϵ0_meVnm)
+# Notice that the value itself has no physical meaning; you need to divide it by the unit.
 println("speed of light in vaccum: ", SpeedOfLight)
 println("speed of light in vaccum with unit: ", SpeedOfLight/(Meter/Second), "m/s")
 
 PhysicalUnit(:ħkB4πϵ0c_eV)
+# Notice that the value itself has no physical meaning; you need to divide it by the unit.
 println("speed of light in vaccum: ", SpeedOfLight) # This will be different
 println("speed of light in vaccum with unit: ", SpeedOfLight/(Meter/Second), "m/s")
 ```
@@ -74,7 +86,7 @@ end
 
 ### A Note on Switching Modes
 
-While this package offers the flexibility to switch between modes at runtime (Usage 2), this practice is discouraged in production code. When you switch modes, the numerical values of the unit variables (like `nm`, `eV`, etc.) change. This can lead to unexpected behavior and hard-to-find bugs. For example:
+While this package offers the flexibility to switch between modes at runtime (Usage 2), this practice is highly discouraged in production code. When you switch modes, the numerical values of the unit variables (like `nm`, `eV`, etc.) change. This can lead to unexpected behavior and hard-to-find bugs. For example:
 
 ```julia
 using PhysicalUnits
@@ -104,7 +116,10 @@ println("a = $a = $(a/nm)nm")
 
 *   `PhysicalUnit(mode::Symbol)`: Set the physical units to a specific mode globally.
 *   `@with_units mode ex`: Execute a block of code `ex` with the physical constants from the given `mode`.
-*   `current_mode()::Symbol`: Print the current mode and return its symbol.
+*   `current_mode()`: Print the current mode explanation and return its symbol.
+
+*   `PhysicalUnits.symbol_list::Vector{Symbol}`: List of available physical constants and units.
+*   `PhysicalUnits.mode_list::Vector{Symbol}`: List of available unit modes.
 
 ## Adding New Modes
 

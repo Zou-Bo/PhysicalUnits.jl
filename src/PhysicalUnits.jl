@@ -12,6 +12,8 @@ export InverseFineStructureConstant, Gram, kg
 
 export @with_units, PhysicalUnit, current_mode
 
+public symbol_list, mode_list
+
 
 ReducedPlanckConstant::Float64 = 0.0
 BoltzmannConstant::Float64 = 0.0
